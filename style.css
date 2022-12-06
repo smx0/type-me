@@ -16,13 +16,28 @@ p {
     color: yellow;
 }
 
+input[type=text] {
+    border-radius: 10px;
+    /* border: 3px lightseagreen; */
+    /* border-style: solid; */
+}
+
+input[type=text]:focus {
+    outline: none;
+    border-radius: 10px;
+    border: 3px lightseagreen;
+    border-style: solid;
+}
+
 .highlight {
     background-color: rgb(58, 65, 173);
   }
-  
+
 .error {
     background-color: rgb(233, 156, 84);
-  }
+    color: red;
+    font-weight: bold;
+}
 
 #message {
   margin-top: 0px;
@@ -53,7 +68,7 @@ p {
   transition: all 200ms;
   touch-action: manipulation;
   vertical-align: baseline;
-  width: auto;
+  width: 50px;
 }
 
 .btn_0:hover,

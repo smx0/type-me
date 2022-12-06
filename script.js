@@ -8,9 +8,9 @@ const quoteList = [
 ]; 
 
 // array use for testing, can be ignored 
-const quoteList2 = [
-  'a b c', 
-  'd e f',
+const quoteListz = [
+  'asd', 
+  'zxc',
 ];
 
 // new array used to store the characters the user has typed
@@ -22,63 +22,103 @@ let wordIndex = 0;
 // time the user started typing 
 let startTime = Date.now(); 
 
-// page elements
+// create vars holding info about UI elms 
 const quoteElement = document.getElementById('quote');
 const messageElement = document.getElementById('message');
 const typedValueElement = document.getElementById('typed-value');
 
-// start logic
+/*
+start logic: everything inside body is run when the elm with ID start
+(in this case it's a button) is clicked 
+*/
 document.getElementById('start').addEventListener('click', () => {
-    // get a rnd quote :: 
-    // multiplies length of quoteList by a rnd number between 0 and 1
-    // takes that product and applies the floor method
-    // which gets the closest integer to that number, rounding down 
+    /*
+    get a rnd quote :: 
+    multiplies length of quoteList by a rnd number between 0 and 1
+    takes that product and applies the floor method
+    which gets the closest integer to that number, rounding down 
+    */
     const rndQuoteIndex = Math.floor(Math.random() * quoteList.length); 
 
     // uses above int from rndQuoteIndex to select a rnd quote from quoteList
     const quote = quoteList[rndQuoteIndex];
 
-    // removes the leading and trailing single quotation marks from above quote
+    /*
+    splits the string called quoteString acc to whitespace and returns an array with each word as an elm 
+    */
     quoteString = quote.split(' ');
 
     // sets wordIndex to 0 so we can restart the game 
     wordIndex = 0; 
 
     // update page 
-    // create array of span elements so we can set a class later 
+
+    /* 
+    create an array of elements, each of which has the 'span' html tag applied to it. 
+    this array will later be assigned a class 
+    the map method takes an array and returns a second array with a function applied to every elm in the first array 
+    the word inside function(word) refers to each elm as we iterate thru quoteString array
+    EX: for word in quoteString 
+    the {return `<span>...`} is the body text of function(word) 
+    for each word in the array called quoteString we are returning it with 
+    the html span tags added
+    the backtick/tildas are an alternative way to concatenate 
+    For more info, search template literals in onenote 
+    */
     const spanWords = quoteString.map(function(word) { return `<span>${word} </span>`});
 
-    // convert into string and set as innerHTML on quote display 
+    /*
+    spanWords is an array of strings, each wrapped/enclosed by html span tags 
+    we join each elm in the array to make a long string
+    sets the content of quoteElement as that string  
+    see onenote/javascript/MS- innerHTML
+    we use .innerHTML vs .innerText because .innerHTMl will return the enclosing
+    span tags adn the enclosed text
+    while .innerText will just give us the enclosed words 
+    */
     quoteElement.innerHTML = spanWords.join(''); 
 
-    // highlights the 1st word 
+    /*
+    highlights the node at index 0; see onenote for childNodes info 
+    remember, quoteElm (prob) looks like this:
+    <span>Start</span><span>of</span><span>quote</span>
+    so we can use the childNode property to select a node since we have the span tags 
+    */
     quoteElement.childNodes[0].className = 'highlight'; 
 
-    // clear previous text 
+    // clear message text  
     messageElement.innerText = ''; 
 
-    // clear textbox of text 
+    // clear input textbox of text 
     typedValueElement.value = ''; 
 
     // next, focus the textbox 
     typedValueElement.focus(); 
 
-    //start the timer 
+    //start the timer; startTime is set when user presses button 
     startTime = new Date().getTime(); 
+
+    // change info text to let player know they can get a new quote 
+    document.getElementById("info").textContent = "Press 'new' for a new quote!"
+
+    // change button text to 'new' 
+    document.getElementById("start").textContent = 'new';
+
+
 }); 
 
 typedValueElement.addEventListener('input', () => {
 
-    // Get the current word
+    // Get the current word from quote 
     const currentWord = quoteString[wordIndex];
     
-    // get the current value
+    // get the current user input 
     const typedValue = typedValueElement.value;
   
     if (typedValue === currentWord && wordIndex === quoteString.length - 1) {
 
       // end of sentence
-      // Display success
+      // Display success message
       const elapsedTime = new Date().getTime() - startTime;
       const message = ` ⭐Nice!⭐ You finished the game in ${elapsedTime / 1000} seconds.`;
       messageElement.innerText = message;
@@ -92,7 +132,7 @@ typedValueElement.addEventListener('input', () => {
       // move to the next word
       wordIndex++;
 
-      // reset the class name for all elements in quote
+      // delete class name for all elements in quote
       for (const wordElement of quoteElement.childNodes) {
         wordElement.className = '';
       }
@@ -101,13 +141,21 @@ typedValueElement.addEventListener('input', () => {
       quoteElement.childNodes[wordIndex].className = 'highlight';
 
     } else if (currentWord.startsWith(typedValue)) {
+
       // currently correct
       // highlight the next word
       typedValueElement.className = '';
+
+      // change info text to let player know they can get a new quote 
+      document.getElementById("info").textContent = "Press 'new' for a new quote!"
+
     } else {
 
-      // error state
+      // change input class to error 
       typedValueElement.className = 'error';
+      
+      // change info text to let user know they made a mistake 
+      document.getElementById("info").textContent = " 😡 You made a mistake "
 
     }
   });
