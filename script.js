@@ -1,9 +1,9 @@
 // array containing quotes 
 const quoteList = [
-    'The way to get started is to quit talking and begin doing',
+    'The way to get started is to quit talking and begin doing.',
     'Life is what happens when you\'re busy making other plans.',
     'The future belongs to those who believe in the beauty of their dreams.' ,
-    'It is during our darkest moments that we must focus to see the light. ',
+    'It is during our darkest moments that we must focus to see the light.',
     'What one man can invent another can discover.',
 ]; 
 
@@ -115,12 +115,14 @@ typedValueElement.addEventListener('input', () => {
     // get the current user input 
     const typedValue = typedValueElement.value;
   
+    // Display (win) message if all words have been typed correctly 
     if (typedValue === currentWord && wordIndex === quoteString.length - 1) {
 
-      // end of sentence
-      // Display success message
+      // get elapsed time 
       const elapsedTime = new Date().getTime() - startTime;
       const message = ` ⭐Nice!⭐ You finished the game in ${elapsedTime / 1000} seconds.`;
+
+      // set win message 
       messageElement.innerText = message;
 
     } else if (typedValue.endsWith(' ') && typedValue.trim() === currentWord) {
@@ -129,26 +131,27 @@ typedValueElement.addEventListener('input', () => {
       // clear the typedValueElement for the new word
       typedValueElement.value = '';
 
-      // move to the next word
+      // increment wordIndex
       wordIndex++;
 
-      // delete class name for all elements in quote
+      // delete class name for all elements in quote so highlighting will be removed 
       for (const wordElement of quoteElement.childNodes) {
         wordElement.className = '';
       }
 
-      // highlight the new word
+      // highlight the next word
       quoteElement.childNodes[wordIndex].className = 'highlight';
 
+    // if user input is a substring (from start) of current word in quote 
     } else if (currentWord.startsWith(typedValue)) {
 
-      // currently correct
       // highlight the next word
       typedValueElement.className = '';
 
       // change info text to let player know they can get a new quote 
       document.getElementById("info").textContent = "Press 'new' for a new quote!"
 
+    // if user typed at least one wrong character 
     } else {
 
       // change input class to error 
