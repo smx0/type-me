@@ -1,4 +1,4 @@
-# urban-pancake
+# type-me
 💬 typing game
 
 made with HTML, CSS, JS 
